@@ -28,9 +28,10 @@ const pickAttempt = (dcNum = 18, thieveryProf = 5, mod = 0) => {
     const successesNeeded = 3;
     let successes = 0;
     let roll = 9;
+    let critfailed = false
  
 
-    while (attempts <= 6 && successes < successesNeeded) {
+    while (critfailed === false && successes < successesNeeded) {
         //let roll = getRoll();
         let playerAttempt = roll + thieveryProf + mod;
         attempts++
@@ -45,7 +46,7 @@ const pickAttempt = (dcNum = 18, thieveryProf = 5, mod = 0) => {
             return attempts;
 
         } else {                                                                            //regular fail
-            console.log(`Sorry, you have ${6 - attempts} attempts remaining...`)
+            console.log("You failed!  Roll again...")
             return attempts;                
         };
     } //end while loop
