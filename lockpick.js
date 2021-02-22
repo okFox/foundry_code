@@ -22,3 +22,33 @@
         // return attempts * 6
 
 
+const pickAttempt = (dcNum = 18, thieveryProf = 5, mod = 0) => {
+    let attempts = 0;
+    const critFail = dcNum - 10;
+    const successesNeeded = 3;
+    let successes = 0;
+    let roll = 9;
+ 
+
+    while (attempts <= 6 && successes < successesNeeded) {
+        //let roll = getRoll();
+        let playerAttempt = roll + thieveryProf + mod;
+        attempts++
+
+        if (playerAttempt <= critFail) {                                                    //crit fail
+            console.log(`Critical Fail! in ${attempts} attempts.`)
+            return attempts;
+
+        } else if (playerAttempt >= dcNum) {                                                //success
+            successes++
+            console.log(`Success! For a total of ${successes} out of ${successesNeeded} needed.`)
+            return attempts;
+
+        } else {                                                                            //regular fail
+            console.log(`Sorry, you have ${6 - attempts} attempts remaining...`)
+            return attempts;                
+        };
+    } //end while loop
+};
+
+pickAttempt();
