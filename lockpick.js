@@ -22,17 +22,18 @@
         // return attempts * 6
 
 
-const pickAttempt = (dcNum = 18, thieveryProf = 5, mod = 0) => {
+const pickAttempt = () => {
+    const dcNum = 18;
     let attempts = 0;
     const critFail = dcNum - 10;
     const successesNeeded = 3;
     let successes = 0;
-    let roll = 9;
+    let getRoll = () => {token.actor.getRollData()};
     let critfailed = false
  
 
     while (critfailed === false && successes < successesNeeded) {
-        //let roll = getRoll();
+        let roll = getRoll();
         let playerAttempt = roll + thieveryProf + mod;
         attempts++
 
