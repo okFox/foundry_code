@@ -18,7 +18,8 @@ const pickAttempt = () => {
     }
 
     while (critfailed === false && successes < successesNeeded) {
-        let playerAttempt = getRoll();
+        let r = getRoll();
+        let playerAttempt = r.total
         attempts++
 
         console.log("woweee", playerAttempt.result, "=", playerAttempt.total)
@@ -38,7 +39,6 @@ const pickAttempt = () => {
             console.log("You failed!  Roll again...")
 
         };
-        console.log("attempts: ", attempts)
     } //end while loop
 };
 
