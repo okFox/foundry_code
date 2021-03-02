@@ -6,7 +6,6 @@ const pickAttempt = () => {
     const critFail = dcNum - 10;
     const successesNeeded = 3;
     let successes = 0;
-
     let critfailed = false
 
     //let roll = new Roll("1d20 + @prof", {prof: `${thieveryProf}`});
