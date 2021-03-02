@@ -1,12 +1,3 @@
-// If die = 1 AND total > DC = fail. 
-// If die = 1 AND total < DC = crit fail
-// If total < DC-10 = crit fail (unless die = 20)
-// If die = 20 AND total < DC = success
-// If die = 20 AND total > DC =crit  success
-// If total > DC+10 = crit success (unless die = 1)
-// If die = 1 AND total > DC+10 = standard success (for more shenanigans
-
-
 
 const pickAttempt = () => {
     const dcNum = 18;
@@ -22,6 +13,7 @@ const pickAttempt = () => {
         let newRoll = roll.evaluate()
         return newRoll;
     }
+
     //Evaluate for Crits
     const critEval = (die, total, dc) => {
         let result;
@@ -35,6 +27,7 @@ const pickAttempt = () => {
                 return result;
     };
 
+    //Continuously roll 'til conditions met
     while (critfailed === false && successes < successesNeeded) {
         let r = getRoll();
         let rollTotal = r.total
