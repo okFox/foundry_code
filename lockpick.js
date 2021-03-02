@@ -17,9 +17,9 @@ const pickAttempt = () => {
     //Evaluate for Crits
     const critEval = (die, total, dc) => {
         let result;
-                if (die === 1 || total <= dc-10) {
+                if (die == 1 || total <= dc-10) {
                     result = "critFail"
-                } else if (die === 20 || total >= dc+10) {
+                } else if (die == 20 || total >= dc+10) {
                     result = "critSuccess"
                 } else {
                     result = "noCrit"
@@ -31,7 +31,7 @@ const pickAttempt = () => {
     while (critfailed === false && successes < successesNeeded) {
         let r = getRoll();
         let rollTotal = r.total
-        let dieRoll = r.result
+        let dieRoll = r.results[0]
         let critResult = critEval(dieRoll, rollTotal, dcNum);
         attempts++
 
