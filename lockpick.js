@@ -34,22 +34,29 @@ const pickAttempt = () => {
     //Evaluate for ones and twenties
     const critEval = (die, total, dc) => {
         let result;
-                if (die == 1 && total <= dc-10) {
-                    result = -1
+                if (die === 1 && total <= dc-10) {
+                    result = "critFail"
                     console.log(`Critical Fail! in ${attempts} attempts.`)
-                } else if (die == 20 && total <= dc-10) {
+                } else if (die === 20 && total <= dc-10) {
                     result = 0
                     console.log("You failed!  Roll again...")
-                } else if (die == 1 && total >= dc+10) {
+                } else if (die === 1 && total >= dc+10) {
                     result = 1
-                    console.log(`Success! For a total of ${successes} out of ${successesNeeded} needed.`)
-                } else if (die == 20 && total >= dc+10) {
+                    console.log(`Success!`)
+                } else if (die === 20 && total >= dc+10) {
                     result = 2
-                    console.log(`Critical Success! For a total of ${successes} out of ${successesNeeded} needed.`)
-                } else if (die != 20 && die != 1 && total >= dc) {
+                    console.log(`Critical Success!`)
+                } else if (total >= dc) {
                     result = 1
-                    console.log(`Success! For a total of ${successes} out of ${successesNeeded} needed.`)
-                }  else if (die != 20 && die != 1 && total <= dc) {
+                    console.log(`Success!`)
+                } else if (total <= dc-10) {
+                    result = "critFail"
+                    console.log(`Critical Fail! in ${attempts} attempts.`)
+                    critfailed = true;
+                } else if (total >= dc+10) {
+                    result = 2
+                    console.log(`Critical Success!`)
+                } else if (total <= dc) {
                     result = 0
                     console.log("You failed!  Roll again...")
                 }
@@ -57,7 +64,7 @@ const pickAttempt = () => {
     };
 
     //Continuously roll 'til conditions met
-    while (critfailed === false && successes < successesNeeded) {
+    while (critfailed === false && successes <= successesNeeded) {
         let r = getRoll();
         attempts++
 
@@ -67,14 +74,14 @@ const pickAttempt = () => {
 
         let critResult = critEval(dieRoll, rollTotal, dcNum);
         
-        if (critResult === -1) {
+        if (critResult === "critFail") {
             critfailed = true;
             return
         } else {                                                                            
             successes = successes + critResult;
         };
 
-        console.log("sucesses:", successes)
+        console.log("successes:", successes)
         console.log("total attempts: ", attempts)
     } //end while loop
 };
