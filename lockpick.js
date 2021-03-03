@@ -64,7 +64,7 @@ const pickAttempt = () => {
     };
 
     //Continuously roll 'til conditions met
-    while (critfailed === false && successes <= successesNeeded) {
+    while (critfailed === false && successes < successesNeeded) {
         let r = getRoll();
         attempts++
 
