@@ -1,20 +1,19 @@
-// Crit Fail:
-// Die = 1, Total < DC. (If the Total = fail, a 1 makes it a crit fail)
-// Total < DC -10 (If the total is DC-10 it should be a crit fail, unless the die is a 20, when it would be a fail)
+// My idea probably involves a large rewrite but was to establish the degrees;
+// IF Total < DC-10 is Crit Fail; Return 1
+// IF DC-10 < Total < DC - Fail; Return 2
+// IF DC < Total < DC+10 - Success; Return 3
+// IF Total > DC+10 - crit success; Return 4
 
-// Fail
-// DC -10 < Total < DC (Total is above DC -10, but below DC - This is the standard fail)
-// Die = 1, Total > DC (Total would otherwise succeed, but the 1 result pushes it down to a fail)
-// Die = 20, Total < DC-10 (Total would otherwise Crit fail, but the 20 pushes it up to a fail)
+// Then checks for die.
+// On DIE = 20; Return (x)+1 (Max. 4, so it ca'nt become 5)
+// On DIE = 1; Return (x)-1 (min.1 so it can't become 0)
 
-// Succeed
-// DC +10 > Total > DC (Standard success; Total is less than DC+10 but more than the DC)
-// Die = 20, Total < DC (Total would otherwise fail, but 20 pushes it to a success)
-// Die = 1, Total > DC+10 (Total would otherwise crit succeed, but 1 pushes it down to a success.)
-
-// Crit success
-// Total > DC +10 (standard Crit, total is above DC+10)
-// Die = 20, DC+10 > Total > DC (Total would otherwise succeed, but 20 pushes it to a crit success)
+// Evaluate,
+// Final Return: 
+// 1 = crit fail -- Plus one attempt, Return attempts and stop rolling
+// 2 = Fail -- Plus one attempt, continue to roll
+// 3 = Success -- Plus one attempt, one success
+// 4 = Crit success -- Plus one attempt, two sucesses
 
 const pickAttempt = () => {
     const dcNum = 18;
@@ -22,7 +21,7 @@ const pickAttempt = () => {
     let attempts = 0;
     const successesNeeded = 3;
     let successes = 0;
-    let critfailed = false
+    let critFailed = false;
 
     //generate a roll
     let getRoll = () => {
@@ -31,37 +30,59 @@ const pickAttempt = () => {
         return newRoll;
     }
 
-    //Evaluate for ones and twenties
-    const critEval = (die, total, dc) => {
-        let result;
-                if (die === 1 && total <= dc-10) {
-                    result = "critFail"
-                    console.log(`Critical Fail! in ${attempts} attempts.`)
-                } else if (die === 20 && total <= dc-10) {
-                    result = 0
-                    console.log("You failed!  Roll again...")
-                } else if (die === 1 && total >= dc+10) {
-                    result = 1
-                    console.log(`Success!`)
-                } else if (die === 20 && total >= dc+10) {
-                    result = 2
-                    console.log(`Critical Success!`)
-                } else if (total >= dc) {
-                    result = 1
-                    console.log(`Success!`)
-                } else if (total <= dc-10) {
-                    result = "critFail"
-                    console.log(`Critical Fail! in ${attempts} attempts.`)
-                    critfailed = true;
-                } else if (total >= dc+10) {
-                    result = 2
-                    console.log(`Critical Success!`)
-                } else if (total <= dc) {
-                    result = 0
-                    console.log("You failed!  Roll again...")
-                }
-                return result;
-    };
+    const evalRoll = (total, dc) => {
+        let degree;
+
+        if (total <= dc-10) {
+            degree = 1; //crit fail
+        } else if (total > dc-10 && total < dc) {
+            degree = 2; //fail
+        } else if (total >= dc && total < dc+10) {
+            degree = 3; //success
+        } else if (total >= dc+10) {
+            degree = 4; // crit success
+        } else {
+            console.log("Macro Error, try again");
+        }
+
+        if (degree <= 0) {
+            degree = 1;
+        } else if (degree >= 5) {
+            degree = 4;
+        }
+
+        return degree;
+    }
+
+    const isCrit = (die) => {
+        if (die === 20) {
+            return 1;
+        } else if (die === 1) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    let findDegree = (degree) => {
+        let success = 0
+        switch (degree) {
+            case 1:
+                console.log("Critical Fail!");
+                break;
+            case 2:
+                console.log("Fail!  Roll again...");
+                break;
+            case 3:
+                console.log("Success!");
+                success++
+                break;
+            case 4:
+                console.log("Critical Success!");
+                success += 2
+                break;
+        }
+    }
 
     //Continuously roll 'til conditions met
     while (critfailed === false && successes < successesNeeded) {
@@ -72,14 +93,17 @@ const pickAttempt = () => {
         let dieRoll = r.results[0]
         console.log("The Roll is: ", r.result, "=", r.total)
 
-        let critResult = critEval(dieRoll, rollTotal, dcNum);
-        
-        if (critResult === "critFail") {
+        let degree = evalRoll(rollTotal, dcNum);
+        let critMod = isCrit(dieRoll);
+
+        let finalDegree = degree + critMod;
+
+        if (finalDegree == 1) {
             critfailed = true;
-            return
-        } else {                                                                            
-            successes = successes + critResult;
-        };
+        }
+
+        let successes = critMod(finalDegree) + successes;
+
 
         console.log("successes:", successes)
         console.log("total attempts: ", attempts)
