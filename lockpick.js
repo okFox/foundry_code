@@ -1,10 +1,11 @@
 
 const pickAttempt = () => {
-    const dcNum = 18;
+    const dcNum = document.getElementById("dc").value;
     let thieveryProf = token.actor.getRollData().skills.thi.totalModifier;
     let attempts = 0;
-    const successesNeeded = 3;
+    const successesNeeded = document.getElementById("successes").value;
     let successes = 0;
+    let finalDegree;
     let critFailed = false;
 
     //generate a roll
@@ -26,7 +27,7 @@ const pickAttempt = () => {
         } else if (total >= dc+10) {
             degree = 4; // crit success
         } else {
-            console.log("Macro Error, try again");
+            ui.notifications.error("Macro Error!");
         }
 
         if (degree <= 0) {
@@ -52,17 +53,17 @@ const pickAttempt = () => {
         let success = 0
         switch (degree) {
             case 1:
-                console.log("Critical Fail!");
+                //console.log("Critical Fail!");
                 break;
             case 2:
-                console.log("Fail!  Roll again...");
+                //console.log("Fail!  Roll again...");
                 break;
             case 3:
-                console.log("Success!");
+                //console.log("Success!");
                 success++
                 break;
             case 4:
-                console.log("Critical Success!");
+                //console.log("Critical Success!");
                 success += 2
                 break;
         }
@@ -76,24 +77,33 @@ const pickAttempt = () => {
 
         let rollTotal = r.total
         let dieRoll = r.results[0]
-        console.log("The Roll is: ", r.result, "=", r.total)
+        //console.log("The Roll is: ", r.result, "=", r.total)
 
         let degree = evalRoll(rollTotal, dcNum);
         let critMod = isCrit(dieRoll);
 
-        let finalDegree = degree + critMod;
+        finalDegree = degree + critMod;
 
         if (finalDegree == 1) {
-            critFailed = true;
+            critFailed = true; //breaks while loop
         }
         
         let newSuccesses = findDegree(finalDegree);
 
         successes =  newSuccesses + successes;
-
-        console.log("successes:", successes)
-        console.log("total attempts: ", attempts)
     }
+
+
+    let message;
+
+    if (finalDegree == 1) {
+        message = `Critical fail in ${attempts} attempts.  This took ${attempts * 6} seconds.`
+    } else {
+        message = `Success in ${attempts} attempts!  This took ${attempts * 6} seconds.`
+    }
+    
+    ui.notifications.info(message)
+
 };
 
 pickAttempt();
