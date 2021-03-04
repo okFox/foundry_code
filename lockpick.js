@@ -1,10 +1,11 @@
 
 const pickAttempt = () => {
-    const dcNum = 18;
+    const dcNum = document.getElementById("dc").value;
     let thieveryProf = token.actor.getRollData().skills.thi.totalModifier;
     let attempts = 0;
-    const successesNeeded = 3;
+    const successesNeeded = document.getElementById("successes").value;
     let successes = 0;
+    let finalDegree;
     let critFailed = false;
 
     //generate a roll
@@ -26,7 +27,7 @@ const pickAttempt = () => {
         } else if (total >= dc+10) {
             degree = 4; // crit success
         } else {
-            console.log("Macro Error, try again");
+            ui.notifications.error("Macro Error!");
         }
 
         if (degree <= 0) {
@@ -51,18 +52,14 @@ const pickAttempt = () => {
     let findDegree = (degree) => {
         let success = 0
         switch (degree) {
-            case 1:
-                console.log("Critical Fail!");
+            case 1: // crit fail
                 break;
-            case 2:
-                console.log("Fail!  Roll again...");
+            case 2: // fail
                 break;
-            case 3:
-                console.log("Success!");
+            case 3: //success
                 success++
                 break;
-            case 4:
-                console.log("Critical Success!");
+            case 4: // crit success
                 success += 2
                 break;
         }
@@ -76,24 +73,43 @@ const pickAttempt = () => {
 
         let rollTotal = r.total
         let dieRoll = r.results[0]
-        console.log("The Roll is: ", r.result, "=", r.total)
 
         let degree = evalRoll(rollTotal, dcNum);
         let critMod = isCrit(dieRoll);
 
-        let finalDegree = degree + critMod;
+        finalDegree = degree + critMod;
 
         if (finalDegree == 1) {
-            critFailed = true;
+            critFailed = true; //breaks while loop
         }
         
         let newSuccesses = findDegree(finalDegree);
 
         successes =  newSuccesses + successes;
-
-        console.log("successes:", successes)
-        console.log("total attempts: ", attempts)
     }
+
+    const recap = () => {
+        let toChat = (content) => {
+            let chatData = {
+              user: game.user.id,
+              content,
+              speaker: ChatMessage.getSpeaker(),
+            }
+            ChatMessage.create(chatData, {})
+        }
+
+        let message;
+
+        if (finalDegree == 1) {
+            message = `Lockpick attempt complete... Critical fail in ${attempts} attempts.  This took ${attempts * 6} seconds.`
+        } else {
+            message = `Lockpick attempt complete...  Success in ${attempts} attempts!  This took ${attempts * 6} seconds.`
+        }
+        
+        toChat(message)
+
+    }
+
+    recap();
 };
 
-pickAttempt();
