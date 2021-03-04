@@ -1,4 +1,4 @@
-//ui.notifications.error
+
 let dialog = new Dialog({
     title: `Pick A Lock`,
     content: `

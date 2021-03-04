@@ -52,18 +52,14 @@ const pickAttempt = () => {
     let findDegree = (degree) => {
         let success = 0
         switch (degree) {
-            case 1:
-                //console.log("Critical Fail!");
+            case 1: // crit fail
                 break;
-            case 2:
-                //console.log("Fail!  Roll again...");
+            case 2: // fail
                 break;
-            case 3:
-                //console.log("Success!");
+            case 3: //success
                 success++
                 break;
-            case 4:
-                //console.log("Critical Success!");
+            case 4: // crit success
                 success += 2
                 break;
         }
@@ -77,7 +73,6 @@ const pickAttempt = () => {
 
         let rollTotal = r.total
         let dieRoll = r.results[0]
-        //console.log("The Roll is: ", r.result, "=", r.total)
 
         let degree = evalRoll(rollTotal, dcNum);
         let critMod = isCrit(dieRoll);
@@ -93,17 +88,28 @@ const pickAttempt = () => {
         successes =  newSuccesses + successes;
     }
 
+    const recap = () => {
+        let toChat = (content) => {
+            let chatData = {
+              user: game.user.id,
+              content,
+              speaker: ChatMessage.getSpeaker(),
+            }
+            ChatMessage.create(chatData, {})
+        }
 
-    let message;
+        let message;
 
-    if (finalDegree == 1) {
-        message = `Critical fail in ${attempts} attempts.  This took ${attempts * 6} seconds.`
-    } else {
-        message = `Success in ${attempts} attempts!  This took ${attempts * 6} seconds.`
+        if (finalDegree == 1) {
+            message = `Lockpick attempt complete... Critical fail in ${attempts} attempts.  This took ${attempts * 6} seconds.`
+        } else {
+            message = `Lockpick attempt complete...  Success in ${attempts} attempts!  This took ${attempts * 6} seconds.`
+        }
+        
+        toChat(message)
+
     }
-    
-    ui.notifications.info(message)
 
+    recap();
 };
 
-pickAttempt();
