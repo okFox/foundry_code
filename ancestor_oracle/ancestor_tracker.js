@@ -18,7 +18,7 @@
 
 
 //TODO
-// save state: to journal?  to gameDB?
+// save state: to journal?  to gameDB? -- entity.update({"some.path.as.string": value})
 //----------------------------------------------------------------------------------------------------
 
 let dailyAncestor = 0; // rolled at beginning of each day; this is default when not in encounter
@@ -32,13 +32,18 @@ const anMartial = (curseLevel) => {
 //set roll mod?
 //set dmg mod?
 //change interface
+}
 
+const anSkill = (curseLevel) => {
+// mod perception and skill checks?
+//change interface
 }
 
 //BUTTON: revert to daily ancestor
 const endEncounter = () => {
     return encounterAncestor = 0;
 }
+
 
 //DROPDOWN: select ancestor when a 4 is rolled
 const selectAncestor = (inEncounter, userSelect) => {
