@@ -10,21 +10,54 @@
     <div class="outer_container">
         <div class="roll_container">
             <button type="button">Roll 1d4</button>
-        <div class="dropdown_container">
-            <label for="ancestors">Choose an Ancestor:</label>
 
-            <select name="ancestors" id="ancestors">
-            <option value="strike">1 - Strike</option>
-            <option value="skill">2 - Skill</option>
-            <option value="cast">3 - Cast</option>
-            </select>
+            <div class="dropdown_container">
+                <label for="ancestors">Choose an Ancestor:</label>
+
+                <select name="ancestors" id="ancestors">
+                <option value="strike">1 - Strike</option>
+                <option value="skill">2 - Skill</option>
+                <option value="cast">3 - Cast</option>
+                </select>
+            </div>
         </div>
-        </div>
+
         <div class="skills_container">
-        
+            <section id="strike_pick">
+                <div id="str_mod">
+                    +1 attack rolls
+                    +2 damage
+                </div>
+                <div id="str_maj">
+                    +1 attack rolls
+                    +6 damage
+                </div>
+                <input type="checkbox" id="strike_daily" name="strike_daily" value="strike_daily">
+            </section>
+            <section id="skill_pick">
+                <div id="skill_mod">
+                    +1 skill checks
+                    +1 perceptioon checks
+                </div>
+                <div id="skill_maj">
+                    +2 skill checks
+                    +2 perceptioon checks
+                </div>
+                <input type="checkbox" id="skill_daily" name="skill_daily" value="skill_daily">
+            </section>
+            <section id="cast_pick">
+                To damage and healing on all non-cantrip, non-duration spells:
+                <div id="cast_mod">
+                    +spell level
+                </div>
+                <div id="cast_maj">
+                    +spell level + 3
+                </div>
+                <input type="checkbox" id="cast_daily" name="cast_daily" value="cast_daily">
+            </section>
         </div>
         <div class="curse_bar_container">
-
+            The curse bar goes here
         </div>
     </div>
 </body>
