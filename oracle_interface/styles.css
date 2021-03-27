@@ -29,3 +29,11 @@ section {
 h3 {
     text-align: center;
 }
+
+.mod_curse_stats {
+    outline: 1px blue solid
+}
+
+.maj_curse_stats {
+    outline: 1px green solid;
+}
